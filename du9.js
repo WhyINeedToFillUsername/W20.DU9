@@ -40,15 +40,11 @@ http.createServer(function (req, res) {
 }).listen(8080);
 
 function sendEvent(res, currTime) {
-    // if (new Date().getTime() - currTime < 20000) { // limit for 20s, unnecessary
-        let runTime = (new Date().getTime() - currTime) / 1000;
-        console.log('writing to res: ' + runTime);
-        res.write("data: connected for " + runTime + " seconds.\n\n");
+    let runTime = (new Date().getTime() - currTime) / 1000;
+    console.log('writing to res: ' + runTime);
+    res.write("data: connected for " + runTime + " seconds.\n\n");
 
-        setTimeout(function () { // "sleep" for 4 s
-            sendEvent(res, currTime);
-        }, 4000);
-    // } else {
-    //     res.end();
-    // }
+    setTimeout(function () { // "sleep" for 4 s
+        sendEvent(res, currTime);
+    }, 4000);
 }

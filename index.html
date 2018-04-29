@@ -15,6 +15,7 @@
         $(document).ready(function () {
             if (window.EventSource != null) {
                 const source = new EventSource('http://localhost:8080/events');
+
                 source.addEventListener('message', function (e) {
                     // fires when new event occurs, e.data contains the event data
                     $('#list').prepend('<li class="new">' + e.data + '</li>');
@@ -24,10 +25,12 @@
                         $('.new').removeClass('new');
                     }, 1000);
                 }, false);
+
                 source.addEventListener('open', function (e) {
                     // Connection was opened
                     $('#message').text("Connection established, listening to events...")
                 }, false);
+
                 source.addEventListener('error', function (e) {
                     if (e.readyState === EventSource.CLOSED) {
                         // Connection was closed
@@ -44,6 +47,7 @@
         });
     </script>
 </head>
+
 <body>
     <h1>W20 DU9 - Server sent events</h1>
     <div id="message"></div>
