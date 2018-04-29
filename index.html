@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .new {
+            background-color: lightpink;
+        }
+        li {
+            transition: background-color 1s ease;
+            background-color: white;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if (window.EventSource != null) {
+                const source = new EventSource('http://localhost:8080/events');
+                source.addEventListener('message', function (e) {
+                    // fires when new event occurs, e.data contains the event data
+                    $('#list').prepend('<li class="new">' + e.data + '</li>');
+
+                    // change color after 1 s
+                    setTimeout(function () {
+                        $('.new').removeClass('new');
+                    }, 1000);
+                }, false);
+                source.addEventListener('open', function (e) {
+                    // Connection was opened
+                    $('#message').text("Connection established, listening to events...")
+                }, false);
+                source.addEventListener('error', function (e) {
+                    if (e.readyState === EventSource.CLOSED) {
+                        // Connection was closed
+                        $('#message').text("Connection closed. Reload page to connect.")
+                    } else {
+                        $('#message').text("Error, see log for details. Reconnecting...");
+                        console.log(e);
+                    }
+                }, false);
+            } else {
+                // Result to xhr polling :(
+                $('#message').text("Server sent events not supported, use a better browser.")
+            }
+        });
+    </script>
+</head>
+<body>
+    <h1>W20 DU9 - Server sent events</h1>
+    <div id="message"></div>
+    <h2>Messages:</h2>
+    <ul id="list"></ul>
+</body>
+</html>
